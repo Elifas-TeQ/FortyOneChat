@@ -1,4 +1,6 @@
-﻿using FortyOneChat.Views;
+﻿using FortyOneChat.Core.Services;
+using FortyOneChat.Views;
+using Microsoft.Practices.Unity;
 using Prism.Unity;
 
 namespace FortyOneChat
@@ -19,6 +21,9 @@ namespace FortyOneChat
         {
             Container.RegisterTypeForNavigation<ChatPage>();
             Container.RegisterTypeForNavigation<PreferencePage>();
+
+            Container.RegisterType<IChatService, Core.Services.Fakes.ChatService>(new ContainerControlledLifetimeManager());
+            Container.RegisterType<IApplicationContext, Core.Services.Fakes.ApplicationContext>(new ContainerControlledLifetimeManager());
         }
     }
 }

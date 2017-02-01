@@ -243,6 +243,11 @@
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Message.cs" />
+    <Compile Include="Models\Requests\GetHistoryRequest.cs" />
+    <Compile Include="Models\Requests\OnlineUserStatusRequest.cs" />
+    <Compile Include="Models\Requests\SendMessageRequest.cs" />
+    <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
