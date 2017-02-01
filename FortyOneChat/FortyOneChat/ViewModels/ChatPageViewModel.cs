@@ -1,15 +1,13 @@
-
 using System;
 using System.Collections.ObjectModel;
-using FortyOneChat.Core;
 using FortyOneChat.Core.Services;
 using Prism.Mvvm;
 using Prism.Navigation;
 using System.Windows.Input;
-using FortyOneChat.Core.Services.Fakes;
 using Prism.Commands;
 using Prism.Services;
-using System.Threading.Tasks;
+using System.Collections.Generic;
+using FortyOneChat.Core.Models;
 
 namespace FortyOneChat.ViewModels
 {
@@ -18,8 +16,10 @@ namespace FortyOneChat.ViewModels
         private INavigationService _navigationService;
         private IPageDialogService _pageDialogService;
         private readonly IChatService _chatService;
+		private readonly IUserService _userService;
+		private readonly IApplicationContext _applicationContext;
         public ObservableCollection<Message> Messages { get; set; }
-        public ObservableCollection<User> OnlineUserCollection { get; set; }
+        public ObservableCollection<string> OnlineUserCollection { get; set; }
         private string _newMessage;
         public string NewMessage
         {
@@ -27,14 +27,14 @@ namespace FortyOneChat.ViewModels
             set { SetProperty(ref _newMessage, value); }
         }
         public ICommand SendMessageCommand { get; set; }
-        public ChatPageViewModel(IChatService chatService, INavigationService navigationService, IPageDialogService pageDialogService)
+		public ChatPageViewModel(IChatService chatService, INavigationService navigationService, IPageDialogService pageDialogService, IUserService userService, IApplicationContext applicationContext)
         {
+			_userService = userService;
             _pageDialogService = pageDialogService;
             _navigationService = navigationService;
+			this._applicationContext = applicationContext;
             SendMessageCommand = new DelegateCommand(SendMessage);
-            OnlineUserCollection = new ObservableCollection<User>();
-            OnlineUserCollection.Add(new User { Id = 1, Name = "Vasyl" });
-            OnlineUserCollection.Add(new User { Id = 2, Name = "Petro" });
+			OnlineUserCollection = new ObservableCollection<string>(this._userService.GetOnlineUsers().Result);
 
             if (chatService == null) throw new ArgumentNullException(nameof(chatService));
             _chatService = chatService;
@@ -42,7 +42,16 @@ namespace FortyOneChat.ViewModels
         }
         public void SendMessage()
         {
-            var ignor = _pageDialogService.DisplayAlertAsync("Message", NewMessage, "OK");
+			var message = new Message
+			{
+				Text = this.NewMessage,
+				Author = new User { Id = this._applicationContext.CurrentUser.Id }
+			};
+			bool isSuccess = this._chatService.SendMessage(message).Result;
+			if (!isSuccess)
+			{
+				_pageDialogService.DisplayAlertAsync("Message", "Message wasn't successfuly sended.", "OK");
+			}
         }
         public void OnNavigatedFrom(NavigationParameters parameters)
         {
@@ -53,7 +62,8 @@ namespace FortyOneChat.ViewModels
         {
             if (Messages == null)
             {
-                Messages = new ObservableCollection<Message>(await _chatService.GetMessages());
+				List<Message> messages = await this._chatService.GetChatHistory(); 
+				Messages = new ObservableCollection<Message>(messages);
             }
         }
     }

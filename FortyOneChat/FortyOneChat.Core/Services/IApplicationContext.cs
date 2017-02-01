@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FortyOneChat.Core.Models;
 
 namespace FortyOneChat.Core.Services
 {
     public interface IApplicationContext
     {
         User CurrentUser { get; }
+		string ServiceUri { get; }
     }
 }

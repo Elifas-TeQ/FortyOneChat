@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FortyOneChat.Core.Models;
 
 namespace FortyOneChat.Core.Services.Fakes
 {
     public class ApplicationContext : IApplicationContext
     {
         private User FakedUser;
+		private string serviceUri = @"http://10.129.68.199:8888/api/Chat";
         public ApplicationContext()
         {
             FakedUser = new User { Id = 1, Name = "Vasya" };
@@ -20,5 +17,12 @@ namespace FortyOneChat.Core.Services.Fakes
                 return FakedUser;
             }
         }
+		public string ServiceUri
+		{
+			get
+			{
+				return this.serviceUri;
+			}
+		}
     }
 }

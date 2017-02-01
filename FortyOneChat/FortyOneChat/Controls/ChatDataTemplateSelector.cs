@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FortyOneChat.Controls.ViewCells;
 using FortyOneChat.Core;
+using FortyOneChat.Core.Models;
 using FortyOneChat.Core.Services;
 using Xamarin.Forms;
 
@@ -16,7 +17,12 @@ namespace FortyOneChat.Controls
         private readonly DataTemplate _outcommingMessageTemplate;
         private readonly IApplicationContext _context;
 
-        public ChatDataTemplateSelector(IApplicationContext context)
+		public ChatDataTemplateSelector()
+		{
+
+		}
+
+		public ChatDataTemplateSelector(IApplicationContext context)
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
 
@@ -29,7 +35,7 @@ namespace FortyOneChat.Controls
         {
             var message = item as Message;
             if (message == null) return null;
-            return message.AuthorId == _context.CurrentUser.Id ? _incomingMessageTemplate : _outcommingMessageTemplate;  
+			return message.Author.Id == _context.CurrentUser.Id ? _incomingMessageTemplate : _outcommingMessageTemplate;  
         }
     }
 }

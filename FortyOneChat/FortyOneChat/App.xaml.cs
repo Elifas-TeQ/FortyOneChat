@@ -22,7 +22,9 @@ namespace FortyOneChat
             Container.RegisterTypeForNavigation<ChatPage>();
             Container.RegisterTypeForNavigation<PreferencePage>();
 
-            Container.RegisterType<IChatService, Core.Services.Fakes.ChatService>(new ContainerControlledLifetimeManager());
+            //Container.RegisterType<IChatService, ChatService>(new ContainerControlledLifetimeManager());
+			Container.RegisterType<IChatService, FortyOneChat.Core.Services.Fake.ChatServiceFake>(new ContainerControlledLifetimeManager());
+			Container.RegisterType<IUserService, UserService>(new ContainerControlledLifetimeManager());
             Container.RegisterType<IApplicationContext, Core.Services.Fakes.ApplicationContext>(new ContainerControlledLifetimeManager());
         }
     }
