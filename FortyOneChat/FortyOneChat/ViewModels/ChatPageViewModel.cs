@@ -16,10 +16,8 @@ namespace FortyOneChat.ViewModels
         private INavigationService _navigationService;
         private IPageDialogService _pageDialogService;
         private readonly IChatService _chatService;
-        public ObservableCollection<Message> Messages { get; set; }
 		private readonly IUserService _userService;
 		private readonly IApplicationContext _applicationContext;
-        public ObservableCollection<Message> Messages { get; set; }
 
         private ObservableCollection<Message> _messages;
         public ObservableCollection<Message> Messages
@@ -27,7 +25,12 @@ namespace FortyOneChat.ViewModels
             get { return _messages; }
             set { SetProperty(ref _messages, value); }
         }
-        public ObservableCollection<string> OnlineUserCollection { get; set; }
+		private ObservableCollection<string> _onlineUserCollection;
+		public ObservableCollection<string> OnlineUserCollection
+		{
+			get { return _onlineUserCollection; }
+			set { SetProperty(ref _onlineUserCollection, value); }
+		}
         private string _newMessage;
         public string NewMessage
         {
@@ -44,9 +47,9 @@ namespace FortyOneChat.ViewModels
             SendMessageCommand = new DelegateCommand(SendMessage);
 			//List<string> users = this._userService.GetOnlineUsers().Result;
 			//OnlineUserCollection = new ObservableCollection<string>(users);
-			OnlineUserCollection = new ObservableCollection<User>();
-            OnlineUserCollection.Add(new User { Id = 1, Name = "Vasyl" });
-            OnlineUserCollection.Add(new User { Id = 2, Name = "Petro" });
+			OnlineUserCollection = new ObservableCollection<string>();
+            OnlineUserCollection.Add("Vasyl");
+            OnlineUserCollection.Add("Petro");
 
             if (chatService == null) throw new ArgumentNullException(nameof(chatService));
             _chatService = chatService;

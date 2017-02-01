@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FortyOneChat.Controls.ViewCells;
-using FortyOneChat.Core;
+using FortyOneChat.Core.Models;
 using FortyOneChat.Core.Services;
 using Xamarin.Forms;
 
 namespace FortyOneChat.Controls
 {
-    class ChatDataTemplateSelector : Xamarin.Forms.DataTemplateSelector
+    class ChatDataTemplateSelector : DataTemplateSelector
     {
         private readonly DataTemplate _incomingMessageTemplate;
         private readonly DataTemplate _outcommingMessageTemplate;
@@ -38,7 +34,7 @@ namespace FortyOneChat.Controls
         {
             var message = item as Message;
             if (message == null) return null;
-            return message.AuthorId == 1 ? _incomingMessageTemplate : _outcommingMessageTemplate;  
+			return message.Author.Id == 1 ? _incomingMessageTemplate : _outcommingMessageTemplate;  
         }
     }
 }

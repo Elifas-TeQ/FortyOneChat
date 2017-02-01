@@ -61,7 +61,7 @@
                                         <ViewCell.View>
                                             <Label
                                                 HorizontalTextAlignment="Center"
-                                                Text="{Binding Name}"
+                                                Text="{Binding}"
                                                 TextColor="Black"
                                                 VerticalTextAlignment="Center" />
                                         </ViewCell.View>
