@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 
 <ContentPage
     x:Class="FortyOneChat.Views.ChatPage"
@@ -6,7 +6,87 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
     prism:ViewModelLocator.AutowireViewModel="True">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Thickness x:Key="pageMargin">10</Thickness>
+            <Thickness x:Key="contentMargin">15</Thickness>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
-        <Label>Hello chat</Label>
+        <ContentView Margin="{StaticResource pageMargin}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="8*" />
+                    <RowDefinition Height="2*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="8*" />
+                    <ColumnDefinition Width="2*" />
+                </Grid.ColumnDefinitions>
+
+                <!--  Message cards  -->
+                <ContentView
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="{StaticResource contentMargin}"
+                    BackgroundColor="Blue">
+                    <ScrollView>
+                        <Label>
+                            Chatting...
+                        </Label>
+                    </ScrollView>
+                </ContentView>
+
+                <!--  Online list  -->
+                <ContentView
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Margin="{StaticResource contentMargin}">
+                    <StackLayout>
+
+                        <Label
+                            FontSize="Large"
+                            HorizontalTextAlignment="Center"
+                            Text="{Binding Path='OnlineUserCollection.Count' StringFormat='Online {0}'}"
+                            TextColor="Green"
+                            VerticalTextAlignment="Center" />
+
+                        <ListView ItemsSource="{Binding OnlineUserCollection}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <ViewCell.View>
+                                            <Label Text="{Binding Name StringFormat}" TextColor="Black" />
+                                        </ViewCell.View>
+                                    </ViewCell>
+
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackLayout>
+                </ContentView>
+
+                <!--  Message entry  -->
+                <ContentView
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Margin="{StaticResource contentMargin}">
+                    <Editor Text="{Binding NewMessage}" />
+                </ContentView>
+
+                <!--  Send button  -->
+                <ContentView
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="{StaticResource contentMargin}">
+                    <Button
+                        Command="{Binding SendMessage}"
+                        HorizontalOptions="Center"
+                        Text="Send"
+                        VerticalOptions="CenterAndExpand" />
+
+                </ContentView>
+            </Grid>
+        </ContentView>
     </ContentPage.Content>
 </ContentPage>
