@@ -5,51 +5,54 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+    xmlns:local="clr-namespace:FortyOneChat.Controls;assembly=FortyOneChat"
     prism:ViewModelLocator.AutowireViewModel="True">
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <Thickness x:Key="pageMargin">10</Thickness>
-            <Thickness x:Key="contentMargin">15</Thickness>
-        </ResourceDictionary>
-    </ContentPage.Resources>
-    <ContentPage.Content>
-        <ContentView Margin="{StaticResource pageMargin}">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="8*" />
-                    <RowDefinition Height="2*" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="8*" />
-                    <ColumnDefinition Width="2*" />
-                </Grid.ColumnDefinitions>
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <Thickness x:Key="pageMargin">10</Thickness>
+      <Thickness x:Key="contentMargin">15</Thickness>
+      <local:ChatDataTemplateSelector x:Key="Selector"></local:ChatDataTemplateSelector>
+    </ResourceDictionary>
+  </ContentPage.Resources>
+  <ContentPage.Content>
+    <ContentView Margin="{StaticResource pageMargin}">
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="8*" />
+          <RowDefinition Height="2*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="8*" />
+          <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
 
-                <!--  Message cards  -->
-                <ContentView
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    Margin="{StaticResource contentMargin}"
-                    BackgroundColor="Blue">
-                    <ScrollView>
-                        <Label>
-                            Chatting...
-                        </Label>
-                    </ScrollView>
-                </ContentView>
+        <!--  Message cards  -->
+        <ListView 
+          x:Name="MessageList"
+          ItemsSource="{Binding Messages}" 
+          Grid.Row="0" 
+          Grid.Column="0"
+          HasUnevenRows="true"
+          ItemTemplate="{StaticResource Selector}"
+          ItemSelected="MessageList_OnItemSelected"
+          ItemTapped="MessageList_OnItemTapped"
+          SeparatorVisibility="None">
+          
+        </ListView>
 
-                <!--  Online list  -->
-                <ContentView
-                    Grid.Row="0"
-                    Grid.Column="1"
-                    Margin="{StaticResource contentMargin}">
-                    <StackLayout>
+        <!--  Online list  -->
+        <ContentView
+            Grid.Row="0"
+            Grid.Column="1"
+            Margin="{StaticResource contentMargin}">
+          <StackLayout>
 
-                        <Label
-                            FontSize="Large"
-                            HorizontalTextAlignment="Center"
-                            Text="{Binding Path='OnlineUserCollection.Count' StringFormat='Online {0}'}"
-                            TextColor="Green"
-                            VerticalTextAlignment="Center" />
+            <Label
+                FontSize="Large"
+                HorizontalTextAlignment="Center"
+                Text="{Binding Path='OnlineUserCollection.Count' StringFormat='Online {0}'}"
+                TextColor="Green"
+                VerticalTextAlignment="Center" />
 
                         <ListView ItemsSource="{Binding OnlineUserCollection}">
                             <ListView.ItemTemplate>
@@ -64,19 +67,19 @@
                                         </ViewCell.View>
                                     </ViewCell>
 
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    </StackLayout>
-                </ContentView>
+                </DataTemplate>
+              </ListView.ItemTemplate>
+            </ListView>
+          </StackLayout>
+        </ContentView>
 
-                <!--  Message entry  -->
-                <ContentView
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    Margin="{StaticResource contentMargin}">
-                    <Editor Text="{Binding NewMessage}" />
-                </ContentView>
+        <!--  Message entry  -->
+        <ContentView
+            Grid.Row="1"
+            Grid.Column="0"
+            Margin="{StaticResource contentMargin}">
+          <Editor Text="{Binding NewMessage}" />
+        </ContentView>
 
                 <!--  Send button  -->
                 <ContentView
@@ -89,8 +92,8 @@
                         Text="Send"
                         VerticalOptions="CenterAndExpand" />
 
-                </ContentView>
-            </Grid>
         </ContentView>
-    </ContentPage.Content>
+      </Grid>
+    </ContentView>
+  </ContentPage.Content>
 </ContentPage>
