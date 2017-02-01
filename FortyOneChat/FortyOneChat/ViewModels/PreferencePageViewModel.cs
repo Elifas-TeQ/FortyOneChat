@@ -1,16 +1,8 @@
-﻿using Prism.Commands;
-using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Prism.Mvvm;
 
 namespace FortyOneChat.ViewModels
 {
     public class PreferencePageViewModel : BindableBase
     {
-        public PreferencePageViewModel()
-        {
-
-        }
     }
 }
