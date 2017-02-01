@@ -8,5 +8,15 @@ namespace FortyOneChat.Views
         {
             InitializeComponent();
         }
+
+        private void MessageList_OnItemSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            MessageList.SelectedItem = null;
+        }
+
+        private void MessageList_OnItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            MessageList.SelectedItem = null;
+        }
     }
 }

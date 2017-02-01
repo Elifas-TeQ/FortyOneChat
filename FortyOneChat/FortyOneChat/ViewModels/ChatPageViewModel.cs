@@ -18,8 +18,16 @@ namespace FortyOneChat.ViewModels
         private INavigationService _navigationService;
         private IPageDialogService _pageDialogService;
         private readonly IChatService _chatService;
-        public ObservableCollection<Message> Messages { get; set; }
+
+        private ObservableCollection<Message> _messages;
+        public ObservableCollection<Message> Messages
+        {
+            get { return _messages; }
+            set { SetProperty(ref _messages, value); }
+        }
         public ObservableCollection<User> OnlineUserCollection { get; set; }
+
+
         private string _newMessage;
         public string NewMessage
         {
