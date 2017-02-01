@@ -6,30 +6,44 @@ using FortyOneChat.Core.Services;
 using Prism.Mvvm;
 using Prism.Navigation;
 using System.Windows.Input;
+using FortyOneChat.Core.Services.Fakes;
+using Prism.Commands;
+using Prism.Services;
+using System.Threading.Tasks;
 
 namespace FortyOneChat.ViewModels
 {
     public class ChatPageViewModel : BindableBase, INavigationAware
     {
+        private INavigationService _navigationService;
+        private IPageDialogService _pageDialogService;
         private readonly IChatService _chatService;
-
         public ObservableCollection<Message> Messages { get; set; }
-
+        public ObservableCollection<User> OnlineUserCollection { get; set; }
         private string _newMessage;
         public string NewMessage
         {
             get { return _newMessage; }
             set { SetProperty(ref _newMessage, value); }
         }
-
-        public ICommand SendMessage { get; set; }
-        public ChatPageViewModel(IChatService chatService)
+        public ICommand SendMessageCommand { get; set; }
+        public ChatPageViewModel(IChatService chatService, INavigationService navigationService, IPageDialogService pageDialogService)
         {
+            _pageDialogService = pageDialogService;
+            _navigationService = navigationService;
+            SendMessageCommand = new DelegateCommand(SendMessage);
+            OnlineUserCollection = new ObservableCollection<User>();
+            OnlineUserCollection.Add(new User { Id = 1, Name = "Vasyl" });
+            OnlineUserCollection.Add(new User { Id = 2, Name = "Petro" });
+
             if (chatService == null) throw new ArgumentNullException(nameof(chatService));
-
             _chatService = chatService;
-        }
 
+        }
+        public void SendMessage()
+        {
+            var ignor = _pageDialogService.DisplayAlertAsync("Message", NewMessage, "OK");
+        }
         public void OnNavigatedFrom(NavigationParameters parameters)
         {
             

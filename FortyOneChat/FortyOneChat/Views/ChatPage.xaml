@@ -56,7 +56,11 @@
                                 <DataTemplate>
                                     <ViewCell>
                                         <ViewCell.View>
-                                            <Label Text="{Binding Name StringFormat}" TextColor="Black" />
+                                            <Label
+                                                HorizontalTextAlignment="Center"
+                                                Text="{Binding Name}"
+                                                TextColor="Black"
+                                                VerticalTextAlignment="Center" />
                                         </ViewCell.View>
                                     </ViewCell>
 
@@ -80,7 +84,7 @@
                     Grid.Column="1"
                     Margin="{StaticResource contentMargin}">
                     <Button
-                        Command="{Binding SendMessage}"
+                        Command="{Binding SendMessageCommand}"
                         HorizontalOptions="Center"
                         Text="Send"
                         VerticalOptions="CenterAndExpand" />
