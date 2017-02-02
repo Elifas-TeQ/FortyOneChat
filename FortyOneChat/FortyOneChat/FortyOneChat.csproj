@@ -43,6 +43,10 @@
     </Compile>
     <Compile Include="Helper\StringHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\IDeiceTimer.cs" />
+    <Compile Include="Services\ITaskDispatcher.cs" />
+    <Compile Include="Services\XamarinTaskDispatcher.cs" />
+    <Compile Include="Services\XamarinTimer.cs" />
     <Compile Include="ViewModels\ChatPageViewModel.cs" />
     <Compile Include="ViewModels\PreferencePageViewModel.cs" />
     <Compile Include="Views\ChatPage.xaml.cs">

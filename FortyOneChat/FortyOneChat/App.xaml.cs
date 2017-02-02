@@ -1,4 +1,5 @@
 ﻿using FortyOneChat.Core.Services;
+using FortyOneChat.Services;
 using FortyOneChat.Views;
 using Microsoft.Practices.Unity;
 using Prism.Unity;
@@ -19,10 +20,11 @@ namespace FortyOneChat
 
         protected override void RegisterTypes()
         {
-            //Container.RegisterType<IChatService, ChatService>(new ContainerControlledLifetimeManager());
             Container.RegisterType<IChatService, FortyOneChat.Core.Services.Fake.ChatServiceFake>(new ContainerControlledLifetimeManager());
             Container.RegisterType<IUserService, UserService>(new ContainerControlledLifetimeManager());
             Container.RegisterType<IApplicationContext, Core.Services.Fakes.ApplicationContext>(new ContainerControlledLifetimeManager());
+            Container.RegisterType<ITaskDispatcher, XamarinTaskDispatcher>(new ContainerControlledLifetimeManager());
+            Container.RegisterType<ITimer, XamarinTimer>(new ContainerControlledLifetimeManager());
 
             Container.RegisterTypeForNavigation<ChatPage>();
             Container.RegisterTypeForNavigation<PreferencePage>();
