@@ -24,7 +24,7 @@ namespace FortyOneChat.Core.Services.Fake
 
 		public Task<bool> SendMessage(Message message)
 		{
-			throw new NotImplementedException();
+            return Task<bool>.Run( () => { return true; });
 		}
 	}
 }

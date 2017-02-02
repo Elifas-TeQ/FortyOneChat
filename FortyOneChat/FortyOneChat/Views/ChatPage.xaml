@@ -4,96 +4,92 @@
     x:Class="FortyOneChat.Views.ChatPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
     xmlns:local="clr-namespace:FortyOneChat.Controls;assembly=FortyOneChat"
+    xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
     prism:ViewModelLocator.AutowireViewModel="True">
-  <ContentPage.Resources>
-    <ResourceDictionary>
-      <Thickness x:Key="pageMargin">10</Thickness>
-      <Thickness x:Key="contentMargin">15</Thickness>
-      <local:ChatDataTemplateSelector x:Key="Selector"></local:ChatDataTemplateSelector>
-    </ResourceDictionary>
-  </ContentPage.Resources>
-  <ContentPage.Content>
-    <ContentView Margin="{StaticResource pageMargin}">
-      <Grid>
-        <Grid.RowDefinitions>
-          <RowDefinition Height="8*" />
-          <RowDefinition Height="2*" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="8*" />
-          <ColumnDefinition Width="2*" />
-        </Grid.ColumnDefinitions>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Thickness x:Key="pagePadding">15</Thickness>
+            <Thickness x:Key="contentPadding">0</Thickness>
+            <local:ChatDataTemplateSelector x:Key="Selector" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <ContentView Padding="{StaticResource pagePadding}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="8*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="8*" />
+                    <ColumnDefinition Width="2*" />
+                </Grid.ColumnDefinitions>
 
-        <!--  Message cards  -->
-        <ListView 
-          x:Name="MessageList"
-          ItemsSource="{Binding Messages}" 
-          Grid.Row="0" 
-          Grid.Column="0"
-          HasUnevenRows="true"
-          ItemTemplate="{StaticResource Selector}"
-          ItemSelected="MessageList_OnItemSelected"
-          ItemTapped="MessageList_OnItemTapped"
-          SeparatorVisibility="None">
-          
-        </ListView>
 
-        <!--  Online list  -->
-        <ContentView
-            Grid.Row="0"
-            Grid.Column="1"
-            Margin="{StaticResource contentMargin}">
-          <StackLayout>
+                <!--  Message cards  -->
+                <ListView
+                    x:Name="MessageList"
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    HasUnevenRows="true"
+                    ItemSelected="MessageList_OnItemSelected"
+                    ItemTapped="MessageList_OnItemTapped"
+                    ItemTemplate="{StaticResource Selector}"
+                    ItemsSource="{Binding Messages}"
+                    SeparatorVisibility="None" />
 
-            <Label
-                FontSize="Large"
-                HorizontalTextAlignment="Center"
-                Text="{Binding Path='OnlineUserCollection.Count' StringFormat='Online {0}'}"
-                TextColor="Green"
-                VerticalTextAlignment="Center" />
+                <!--  Online list  -->
+                <ContentView
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Padding="{StaticResource contentPadding}">
+
+                    <StackLayout>
+                        <Label
+                            FontSize="Large"
+                            HorizontalTextAlignment="Center"
+                            Text="{Binding Path='OnlineUserCollection.Count' StringFormat='Online {0}'}"
+                            TextColor="Green"
+                            VerticalTextAlignment="Center" />
 
                         <ListView ItemsSource="{Binding OnlineUserCollection}">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <ViewCell>
-                                        <ViewCell.View>
-                                            <Label
-                                                HorizontalTextAlignment="Center"
-                                                Text="{Binding}"
-                                                TextColor="Black"
-                                                VerticalTextAlignment="Center" />
-                                        </ViewCell.View>
-                                    </ViewCell>
+                                    <TextCell Text="{Binding}" TextColor="Black" />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackLayout>
 
-                </DataTemplate>
-              </ListView.ItemTemplate>
-            </ListView>
-          </StackLayout>
-        </ContentView>
+                </ContentView>
 
-        <!--  Message entry  -->
-        <ContentView
-            Grid.Row="1"
-            Grid.Column="0"
-            Margin="{StaticResource contentMargin}">
-          <Editor Text="{Binding NewMessage}" />
-        </ContentView>
 
-                <!--  Send button  -->
-                <ContentView
+                <Grid
                     Grid.Row="1"
-                    Grid.Column="1"
-                    Margin="{StaticResource contentMargin}">
-                    <Button
-                        Command="{Binding SendMessageCommand}"
-                        HorizontalOptions="Center"
-                        Text="Send"
-                        VerticalOptions="CenterAndExpand" />
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="8*" />
+                        <ColumnDefinition Width="2*" />
+                    </Grid.ColumnDefinitions>
 
+                    <!--  Message entry  -->
+                    <ContentView Grid.Column="0" Padding="{StaticResource contentPadding}">
+                        <Editor Text="{Binding NewMessage}" />
+                    </ContentView>
+
+                    <!--  Send button  -->
+                    <ContentView Grid.Column="1" Padding="{StaticResource contentPadding}">
+                        <Button
+                            Command="{Binding SendMessageCommand}"
+                            HorizontalOptions="Center"
+                            Text="Send"
+                            VerticalOptions="CenterAndExpand" />
+
+                    </ContentView>
+                </Grid>
+            </Grid>
         </ContentView>
-      </Grid>
-    </ContentView>
-  </ContentPage.Content>
+    </ContentPage.Content>
 </ContentPage>
