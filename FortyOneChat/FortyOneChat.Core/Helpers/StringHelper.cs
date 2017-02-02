@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FortyOneChat.Helper
+namespace FortyOneChat.Core.Helpers
 {
     public static class StringHelper
     {
