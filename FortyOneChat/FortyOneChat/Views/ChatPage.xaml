@@ -10,7 +10,7 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <Thickness x:Key="pagePadding">10, 20, 10, 20</Thickness>
-            <Thickness x:Key="contentPadding">5</Thickness>
+            <Thickness x:Key="contentPadding">0</Thickness>
             <local:ChatDataTemplateSelector x:Key="Selector" />
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -19,12 +19,12 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="7*" />
+                    <RowDefinition Height="10*" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="8*" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="2*" />
                 </Grid.ColumnDefinitions>
 
                 <Label

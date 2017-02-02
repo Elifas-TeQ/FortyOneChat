@@ -58,6 +58,7 @@ namespace FortyOneChat.ViewModels
             OnlineUserCollection.Add("Oleksiy");
             OnlineUserCollection.Add("Shasha");
             OnlineUserCollection.Add("Ruslan");
+            OnlineUserCollection.Add("Petro Glazurko");
 
             if (chatService == null)
             {
@@ -70,21 +71,24 @@ namespace FortyOneChat.ViewModels
         {
             _newMessage = _newMessage.TrimEmptyTape().Trim();
 
-            var message = new Message
-			{
-				Text = _newMessage,
-				Author = new User { Id = this._applicationContext.CurrentUser.Id }
-			};
-
-            bool isSuccess = this._chatService.SendMessage(message).Result;
-
-            if (!isSuccess)
-			{
-				_pageDialogService.DisplayAlertAsync("Message", "Message wasn't successfuly sended.", "OK");
-			}
-            else
+            if (!String.IsNullOrEmpty(_newMessage))
             {
-                AddMessage(message);
+                var message = new Message
+                {
+                    Text = _newMessage,
+                    Author = new User { Id = this._applicationContext.CurrentUser.Id }
+                };
+
+                bool isSuccess = this._chatService.SendMessage(message).Result;
+
+                if (!isSuccess)
+                {
+                    _pageDialogService.DisplayAlertAsync("Message", "Message wasn't successfuly sended.", "OK");
+                }
+                else
+                {
+                    AddMessage(message);
+                }
             }
         }
 
