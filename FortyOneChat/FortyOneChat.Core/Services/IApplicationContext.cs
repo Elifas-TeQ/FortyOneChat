@@ -4,7 +4,7 @@ namespace FortyOneChat.Core.Services
 {
     public interface IApplicationContext
     {
-        User CurrentUser { get; }
+        User CurrentUser { get; set; }
 		string ServiceUri { get; }
     }
 }

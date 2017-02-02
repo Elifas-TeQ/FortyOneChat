@@ -16,6 +16,8 @@ namespace FortyOneChat.ViewModels
         private readonly IPageDialogService _pageDialogService;
         private readonly INavigationService _navigationService;
         private readonly IUserService _userService;
+        private readonly IApplicationContext _appContext;
+        
         public ICommand LoginCommand { get; set; }
         private const string _serviceUri = @"http://10.129.68.199:8888/api/Chat";
 
@@ -27,11 +29,12 @@ namespace FortyOneChat.ViewModels
         }
 
 
-        public PreferencePageViewModel(INavigationService navigationService, IUserService userService, IPageDialogService pageDialogService)
+        public PreferencePageViewModel(INavigationService navigationService, IUserService userService, IPageDialogService pageDialogService, IApplicationContext appContext)
         {
             _navigationService = navigationService;
             _userService = userService;
             _pageDialogService = pageDialogService;
+            _appContext = appContext;
 
             LoginCommand = new DelegateCommand(LogIn);
         }
@@ -50,6 +53,7 @@ namespace FortyOneChat.ViewModels
                 }
                 else
                 {
+                    _appContext.CurrentUser = responce;
                     _navigationService.NavigateAsync("MainNavigationPage/ChatPage");
                 }
 

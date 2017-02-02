@@ -16,6 +16,8 @@ namespace FortyOneChat.Core.Services.Fakes
             {
                 return FakedUser;
             }
+
+            set { }
         }
 		public string ServiceUri
 		{
