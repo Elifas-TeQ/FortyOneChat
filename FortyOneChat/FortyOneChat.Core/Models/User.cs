@@ -6,6 +6,6 @@ namespace FortyOneChat.Core.Models
 	{
 		public int Id { get; set; }
 		public string Name { get; set; }
-		public DateTime LastDateOnline { get; set; }
+		public DateTime LastTimeOnline { get; set; }
 	}
 }

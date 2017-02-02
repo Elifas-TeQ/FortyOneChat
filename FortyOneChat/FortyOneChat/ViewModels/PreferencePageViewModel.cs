@@ -1,6 +1,7 @@
 ﻿using Prism.Mvvm;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using FortyOneChat.Controls;
 using Newtonsoft.Json;
 using Prism.Commands;
 using Prism.Navigation;
@@ -29,12 +30,12 @@ namespace FortyOneChat.ViewModels
         }
 
 
-        public PreferencePageViewModel(INavigationService navigationService, IUserService userService, IPageDialogService pageDialogService, IApplicationContext appContext)
+        public PreferencePageViewModel(INavigationService navigationService, IUserService userService, IPageDialogService pageDialogService, IApplicationContext applicationContext)
         {
             _navigationService = navigationService;
             _userService = userService;
             _pageDialogService = pageDialogService;
-            _appContext = appContext;
+            _applicationContext = applicationContext;
 
             LoginCommand = new DelegateCommand(LogIn);
         }
@@ -53,7 +54,8 @@ namespace FortyOneChat.ViewModels
                 }
                 else
                 {
-                    _appContext.CurrentUser = responce;
+                    _applicationContext.CurrentUser = responce;
+                    ChatDataTemplateSelector.CurrentUserId = responce.Id;
                     _navigationService.NavigateAsync("MainNavigationPage/ChatPage");
                 }
 

@@ -14,6 +14,7 @@ using FortyOneChat.Services;
 using System.Threading.Tasks;
 using System.Linq;
 using FortyOneChat.Views;
+using Xamarin.Forms;
 
 namespace FortyOneChat.ViewModels
 {
@@ -21,8 +22,8 @@ namespace FortyOneChat.ViewModels
     {
         private readonly IPageDialogService _pageDialogService;
         private readonly IChatService _chatService;
-		private readonly IUserService _userService;
-		private readonly IApplicationContext _applicationContext;
+        private readonly IUserService _userService;
+        private readonly IApplicationContext _applicationContext;
         private readonly ITimer _timer;
 
         private ObservableCollection<Message> _messages;
@@ -33,12 +34,12 @@ namespace FortyOneChat.ViewModels
             set { SetProperty(ref _messages, value); }
         }
 
-		private ObservableCollection<string> _onlineUserCollection;
-		public ObservableCollection<string> OnlineUserCollection
-		{
-			get { return _onlineUserCollection; }
-			set { SetProperty(ref _onlineUserCollection, value); }
-		}
+        private ObservableCollection<string> _onlineUserCollection;
+        public ObservableCollection<string> OnlineUserCollection
+        {
+            get { return _onlineUserCollection; }
+            set { SetProperty(ref _onlineUserCollection, value); }
+        }
 
         private string _newMessage;
         public string NewMessage
@@ -52,26 +53,19 @@ namespace FortyOneChat.ViewModels
         public bool StopTimer;
 
         public ChatPageViewModel(
-            IChatService chatService, 
-            IPageDialogService pageDialogService, 
-            IUserService userService, 
+            IChatService chatService,
+            IPageDialogService pageDialogService,
+            IUserService userService,
             IApplicationContext applicationContext,
             ITimer timer)
         {
-			this._userService = userService;
+            this._userService = userService;
             this._pageDialogService = pageDialogService;
-			this._applicationContext = applicationContext;
+            this._applicationContext = applicationContext;
             this._timer = timer;
             this.SendMessageCommand = new DelegateCommand(async () => { await SendMessage(); });
-           
-            List<string> users = this._userService.GetOnlineUsers().Result;
-            OnlineUserCollection = new ObservableCollection<string>(users);
-            OnlineUserCollection.Add("Andriy");
-            OnlineUserCollection.Add("Valeriy");
-            OnlineUserCollection.Add("Oleksiy");
-            OnlineUserCollection.Add("Shasha");
-            OnlineUserCollection.Add("Ruslan");
-            OnlineUserCollection.Add("Petro Glazurko");
+
+            OnlineUserCollection = new ObservableCollection<string>();
 
             if (chatService == null)
             {
@@ -90,7 +84,8 @@ namespace FortyOneChat.ViewModels
                     var message = new Message
                     {
                         Text = _newMessage,
-                        Author = new User { Id = this._applicationContext.CurrentUser.Id }
+                        Author = _applicationContext.CurrentUser,
+                        DateCreated = DateTime.Now
                     };
 
                     bool isSuccess = await this._chatService.SendMessage(message);
@@ -104,15 +99,6 @@ namespace FortyOneChat.ViewModels
             NewMessage = string.Empty;
         }
 
-        private void AddMessage(Message message)
-        {
-            if(!String.IsNullOrEmpty(message.Text))
-            {
-                Messages.Add(message);
-                NewMessage = String.Empty;
-            }
-        }
-        
         public void OnNavigatedFrom(NavigationParameters parameters)
         {
             StopTimer = true;
@@ -122,8 +108,11 @@ namespace FortyOneChat.ViewModels
         {
             if (Messages == null)
             {
-				List<Message> messages = await this._chatService.GetChatHistory(); 
-				Messages = new ObservableCollection<Message>(messages);
+                List<Message> messages = await this._chatService.GetChatHistory();
+                Messages = new ObservableCollection<Message>(messages.Where(x => x.Id >= 0));
+                ScrollToTheEnd(false);
+
+
             }
 
             _timer.RunTimer(TimeSpan.FromSeconds(5), TheLoop);
@@ -131,34 +120,52 @@ namespace FortyOneChat.ViewModels
 
         private bool TheLoop()
         {
-            Task.Factory.StartNew(async () => {
-                int maxMessageId = 0;
+            Task.Factory.StartNew(async () =>
+            {
+                int maxMessageId = -1;
                 if (Messages.Any())
                 {
                     maxMessageId = Messages.Select(x => x.Id).Max();
                 }
 
-                //var messagesFromServer = (await _chatService.GetChatHistory()).Where(x => x.Id > maxMessageId).ToList();
+                var unfilterdMessages = await _chatService.GetChatHistory();
+                var newMessages = unfilterdMessages.Where(x => x.Id > maxMessageId).ToList();
 
-                //foreach(var message in messagesFromServer)
-                //{
-                //    Messages.Add(message);
-                //}
-
-                Messages.Clear();
-
-                var messages = await _chatService.GetChatHistory();
-                foreach (var item in messages)
+                foreach (var message in newMessages)
                 {
-                    Messages.Add(item);
+                    Messages.Add(message);
                 }
-                
 
-                var page = (App.Current.MainPage.Navigation.NavigationStack.Last() as ChatPage);
-                page.MessagesControl.ScrollTo(Messages.LastOrDefault(), Xamarin.Forms.ScrollToPosition.MakeVisible, true);
+                if (newMessages.Any())
+                {
+                    ScrollToTheEnd(true);
+                }
 
+                var authors = unfilterdMessages
+                    .Where(x => x.Author.LastTimeOnline >= DateTime.UtcNow)
+                    .GroupBy(x => x.Author.Name)
+                    .Select(x => x.Key)
+                    .ToList();
+                OnlineUserCollection.Clear();
+                foreach (var author in authors)
+                {
+                    if (!string.IsNullOrEmpty(author))
+                    {
+                        OnlineUserCollection.Add(author);
+                    }
+                }
             });
             return !StopTimer;
+        }
+
+        private void ScrollToTheEnd(bool animated)
+        {
+            if (Messages.Any())
+            {
+                var navPage = Application.Current.MainPage.Navigation.NavigationStack.Last() as NavigationPage;
+                var chatPage = navPage?.CurrentPage as ChatPage;
+                chatPage?.MessagesControl.ScrollTo(Messages.Last(), Xamarin.Forms.ScrollToPosition.End, animated);
+            }
         }
     }
 }

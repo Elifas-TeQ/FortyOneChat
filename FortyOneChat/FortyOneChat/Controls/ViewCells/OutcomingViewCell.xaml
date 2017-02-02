@@ -30,7 +30,7 @@
             Grid.Column="1"
             FontSize="Micro"
             HorizontalTextAlignment="End"
-            Text="{Binding DateTime, StringFormat='{0:MM/dd/yyyy hh:mm tt}'}"
+            Text="{Binding DateCreated, StringFormat='{0:MM/dd/yyyy hh:mm tt} by you'}"
             TextColor="Gray" />
     </Grid>
 </ViewCell>

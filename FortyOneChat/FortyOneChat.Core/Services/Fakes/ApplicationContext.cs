@@ -5,7 +5,7 @@ namespace FortyOneChat.Core.Services.Fakes
     public class ApplicationContext : IApplicationContext
     {
         private User FakedUser;
-		private string serviceUri = @"http://10.129.68.199:8888/api/Chat";
+		private string serviceUri = @"http://192.168.127.2:7777/api/Chat";
         public ApplicationContext()
         {
             FakedUser = new User { Id = 0, Name = "Vasya" };
@@ -16,8 +16,10 @@ namespace FortyOneChat.Core.Services.Fakes
             {
                 return FakedUser;
             }
-
-            set { }
+            set
+            {
+                
+            }
         }
 		public string ServiceUri
 		{

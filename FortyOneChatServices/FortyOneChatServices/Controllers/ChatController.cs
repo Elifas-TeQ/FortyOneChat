@@ -12,7 +12,7 @@ namespace FortyOneChatServices.Controllers
     {
         public static List<User> Users = new List<User>();
         public static List< Message> Messages = new List<Message>();
-        private const int DELTA_ONLINE = 3;
+        private const int DELTA_ONLINE = 2;
 
         [HttpGet]
         [Route("History")]
@@ -21,7 +21,12 @@ namespace FortyOneChatServices.Controllers
             var curUser = Users.SingleOrDefault(u => u.Id == UserId);
             if (curUser!= null)
             {
-                curUser.LastTimeOnline = DateTime.Now.AddMinutes(DELTA_ONLINE);
+                curUser.LastTimeOnline = DateTime.UtcNow.AddMinutes(DELTA_ONLINE);
+
+                foreach (var message in Messages.Where(m => m.Author.Id == curUser.Id))
+                {
+                    message.Author.LastTimeOnline = DateTime.UtcNow.AddMinutes(DELTA_ONLINE);
+                }
             }
             
             return Messages; 
@@ -31,26 +36,32 @@ namespace FortyOneChatServices.Controllers
         [Route("Login")]
         public User Login(string userName)
         {
-            if (Users.Count == 0)
+            User retUser;
+             if (Users.Count == 0)
             {
-                var curUser = new User() { Id = 0, Name = userName, LastTimeOnline = DateTime.Now };
+                var curUser = new User() { Id = 0, Name = userName };
                 Users.Add(curUser);
-                return curUser;
+                retUser = curUser;
             }
             else
             {
                var curUser =  Users.SingleOrDefault(u => u.Name.Equals(userName));
                 if (curUser == null)
                 {
-                    var newUser = new User() { Id = Users.Max(x => x.Id) + 1, Name = userName, LastTimeOnline = DateTime.Now };
+                    var newUser = new User() { Id = Users.Max(x => x.Id) + 1, Name = userName };
                     Users.Add(newUser);
-                    return newUser;
+                    retUser = newUser;
                 }
                 else
                 {
-                    return curUser;
+                    retUser =  curUser;
                 }
             }
+
+            retUser.LastTimeOnline = DateTime.UtcNow.AddMinutes(DELTA_ONLINE);
+            Messages.Add(new Message() { Id = -1, Author = retUser});
+
+            return retUser;
         }
         
         [HttpPost]
@@ -58,6 +69,7 @@ namespace FortyOneChatServices.Controllers
         public bool SendMessage(Message message)
         {
             message.Id = Messages.Count != 0 ? Messages.Max(x => x.Id) + 1 : 0;
+            message.Author.LastTimeOnline = DateTime.UtcNow.AddMinutes(DELTA_ONLINE);
             Messages.Add(message);
         
             return true;
