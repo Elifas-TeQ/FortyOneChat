@@ -3,6 +3,8 @@ using FortyOneChat.Core.Models;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 
 namespace FortyOneChat.Core.Services
 {
@@ -32,9 +34,11 @@ namespace FortyOneChat.Core.Services
 		public async Task<bool> SendMessage(Message message)
 		{
 			string content = JsonConvert.SerializeObject(message);
-			var stringContent = new StringContent(content);
+			var stringContent = new StringContent(content, Encoding.UTF8, "application/json");
 			var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 			HttpResponseMessage response = await httpClient.PostAsync($"{this._applicationContext.ServiceUri}/SendMessage", stringContent);
+            
 			return response.IsSuccessStatusCode;
 		}
 	}

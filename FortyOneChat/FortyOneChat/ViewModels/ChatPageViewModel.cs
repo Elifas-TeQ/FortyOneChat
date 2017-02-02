@@ -13,6 +13,7 @@ using FortyOneChat.Core.Helpers;
 using FortyOneChat.Services;
 using System.Threading.Tasks;
 using System.Linq;
+using FortyOneChat.Views;
 
 namespace FortyOneChat.ViewModels
 {
@@ -61,7 +62,7 @@ namespace FortyOneChat.ViewModels
             this._pageDialogService = pageDialogService;
 			this._applicationContext = applicationContext;
             this._timer = timer;
-            this.SendMessageCommand = new DelegateCommand(SendMessage);
+            this.SendMessageCommand = new DelegateCommand(async () => { await SendMessage(); });
            
             List<string> users = this._userService.GetOnlineUsers().Result;
             OnlineUserCollection = new ObservableCollection<string>(users);
@@ -77,9 +78,8 @@ namespace FortyOneChat.ViewModels
                 throw new ArgumentNullException(nameof(chatService));
             }
             _chatService = chatService;
-
         }
-        public void SendMessage()
+        public async Task SendMessage()
         {
             if (!String.IsNullOrEmpty(_newMessage))
             {
@@ -93,18 +93,15 @@ namespace FortyOneChat.ViewModels
                         Author = new User { Id = this._applicationContext.CurrentUser.Id }
                     };
 
-                    bool isSuccess = this._chatService.SendMessage(message).Result;
+                    bool isSuccess = await this._chatService.SendMessage(message);
 
                     if (!isSuccess)
                     {
                         _pageDialogService.DisplayAlertAsync("Message", "Message wasn't successfuly sended.", "OK");
                     }
-                    else
-                    {
-                        AddMessage(message);
-                    }
                 }
             }
+            NewMessage = string.Empty;
         }
 
         private void AddMessage(Message message)
@@ -141,12 +138,25 @@ namespace FortyOneChat.ViewModels
                     maxMessageId = Messages.Select(x => x.Id).Max();
                 }
 
-                var messagesFromServer = (await _chatService.GetChatHistory()).Where(x => x.Id > maxMessageId).ToList();
+                //var messagesFromServer = (await _chatService.GetChatHistory()).Where(x => x.Id > maxMessageId).ToList();
 
-                foreach(var message in messagesFromServer)
+                //foreach(var message in messagesFromServer)
+                //{
+                //    Messages.Add(message);
+                //}
+
+                Messages.Clear();
+
+                var messages = await _chatService.GetChatHistory();
+                foreach (var item in messages)
                 {
-                    Messages.Add(message);
+                    Messages.Add(item);
                 }
+                
+
+                var page = (App.Current.MainPage.Navigation.NavigationStack.Last() as ChatPage);
+                page.MessagesControl.ScrollTo(Messages.LastOrDefault(), Xamarin.Forms.ScrollToPosition.MakeVisible, true);
+
             });
             return !StopTimer;
         }

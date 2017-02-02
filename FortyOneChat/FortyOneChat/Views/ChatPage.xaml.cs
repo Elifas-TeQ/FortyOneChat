@@ -18,5 +18,13 @@ namespace FortyOneChat.Views
         {
             MessageList.SelectedItem = null;
         }
+
+        public ListView MessagesControl
+        {
+            get
+            {
+                return MessageList;
+            }
+        }
     }
 }
