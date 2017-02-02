@@ -42,7 +42,7 @@ namespace FortyOneChat.ViewModels
         }
         public void SendMessage()
         {
-            var ignor = _pageDialogService.DisplayAlertAsync("Message", NewMessage, "OK");
+            _pageDialogService.DisplayAlertAsync("Message", NewMessage, "OK");
         }
         public void OnNavigatedFrom(NavigationParameters parameters)
         {

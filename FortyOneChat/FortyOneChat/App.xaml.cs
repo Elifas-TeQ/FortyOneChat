@@ -19,11 +19,11 @@ namespace FortyOneChat
 
         protected override void RegisterTypes()
         {
-            Container.RegisterTypeForNavigation<ChatPage>();
-            Container.RegisterTypeForNavigation<PreferencePage>();
-
             Container.RegisterType<IChatService, Core.Services.Fakes.ChatService>(new ContainerControlledLifetimeManager());
             Container.RegisterType<IApplicationContext, Core.Services.Fakes.ApplicationContext>(new ContainerControlledLifetimeManager());
+
+            Container.RegisterTypeForNavigation<ChatPage>();
+            Container.RegisterTypeForNavigation<PreferencePage>();
         }
     }
 }
