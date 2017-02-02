@@ -41,6 +41,7 @@
     <Compile Include="Controls\ViewCells\OutcomingViewCell.xaml.cs">
       <DependentUpon>OutcomingViewCell.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helper\StringHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\ChatPageViewModel.cs" />
     <Compile Include="ViewModels\PreferencePageViewModel.cs" />

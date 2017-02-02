@@ -8,6 +8,8 @@ using Prism.Commands;
 using Prism.Services;
 using System.Collections.Generic;
 using FortyOneChat.Core.Models;
+using FortyOneChat.ViewModels;
+using FortyOneChat.Helper;
 
 namespace FortyOneChat.ViewModels
 {
@@ -51,11 +53,11 @@ namespace FortyOneChat.ViewModels
 
             List<string> users = this._userService.GetOnlineUsers().Result;
             OnlineUserCollection = new ObservableCollection<string>(users);
-            OnlineUserCollection.Add("Lpol");
-            OnlineUserCollection.Add("asd");
-            OnlineUserCollection.Add("Lpddol");
-            OnlineUserCollection.Add("Lpddsadol");
-            OnlineUserCollection.Add("Lpdddol");
+            OnlineUserCollection.Add("Andriy");
+            OnlineUserCollection.Add("Valeriy");
+            OnlineUserCollection.Add("Oleksiy");
+            OnlineUserCollection.Add("Shasha");
+            OnlineUserCollection.Add("Ruslan");
 
             if (chatService == null)
             {
@@ -66,9 +68,11 @@ namespace FortyOneChat.ViewModels
         }
         public void SendMessage()
         {
-			var message = new Message
+            _newMessage = _newMessage.TrimEmptyTape().Trim();
+
+            var message = new Message
 			{
-				Text = this.NewMessage,
+				Text = _newMessage,
 				Author = new User { Id = this._applicationContext.CurrentUser.Id }
 			};
 
@@ -92,7 +96,7 @@ namespace FortyOneChat.ViewModels
                 NewMessage = String.Empty;
             }
         }
-
+        
         public void OnNavigatedFrom(NavigationParameters parameters)
         {
             

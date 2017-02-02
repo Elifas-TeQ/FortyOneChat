@@ -9,8 +9,8 @@
     prism:ViewModelLocator.AutowireViewModel="True">
     <ContentPage.Resources>
         <ResourceDictionary>
-            <Thickness x:Key="pagePadding">15</Thickness>
-            <Thickness x:Key="contentPadding">0</Thickness>
+            <Thickness x:Key="pagePadding">10, 20, 10, 20</Thickness>
+            <Thickness x:Key="contentPadding">5</Thickness>
             <local:ChatDataTemplateSelector x:Key="Selector" />
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -18,19 +18,27 @@
         <ContentView Padding="{StaticResource pagePadding}">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="8*" />
-                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="7*" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="8*" />
-                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
+                <Label
+                    Grid.Row="0"
+                    FontAttributes="Bold"
+                    FontFamily="Roboto"
+                    FontSize="Large"
+                    Text="Forty One Chat"
+                    TextColor="#673AB7" />
 
                 <!--  Message cards  -->
                 <ListView
                     x:Name="MessageList"
-                    Grid.Row="0"
+                    Grid.Row="1"
                     Grid.Column="0"
                     HasUnevenRows="true"
                     ItemSelected="MessageList_OnItemSelected"
@@ -41,32 +49,38 @@
 
                 <!--  Online list  -->
                 <ContentView
-                    Grid.Row="0"
+                    Grid.Row="1"
                     Grid.Column="1"
                     Padding="{StaticResource contentPadding}">
-
                     <StackLayout>
                         <Label
-                            FontSize="Large"
                             HorizontalTextAlignment="Center"
                             Text="{Binding Path='OnlineUserCollection.Count' StringFormat='Online {0}'}"
-                            TextColor="Green"
+                            TextColor="#00E676"
                             VerticalTextAlignment="Center" />
 
                         <ListView ItemsSource="{Binding OnlineUserCollection}">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <TextCell Text="{Binding}" TextColor="Black" />
+                                    <ViewCell>
+                                        <Label
+                                            BackgroundColor="#ECEFF1"
+                                            FontSize="Small"
+                                            HorizontalTextAlignment="Center"
+                                            Text="{Binding}"
+                                            TextColor="#37474F"
+                                            VerticalTextAlignment="Center" />
+                                    </ViewCell>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
+
                         </ListView>
                     </StackLayout>
 
                 </ContentView>
 
-
                 <Grid
-                    Grid.Row="1"
+                    Grid.Row="2"
                     Grid.Column="0"
                     Grid.ColumnSpan="2">
                     <Grid.ColumnDefinitions>
@@ -82,9 +96,11 @@
                     <!--  Send button  -->
                     <ContentView Grid.Column="1" Padding="{StaticResource contentPadding}">
                         <Button
+                            BackgroundColor="#673AB7"
+                            BorderRadius="0"
                             Command="{Binding SendMessageCommand}"
-                            HorizontalOptions="Center"
                             Text="Send"
+                            TextColor="White"
                             VerticalOptions="CenterAndExpand" />
 
                     </ContentView>
