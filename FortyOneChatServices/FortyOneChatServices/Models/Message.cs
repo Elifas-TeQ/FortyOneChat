@@ -8,8 +8,8 @@ namespace FortyOneChatServices.Models
     public class Message
     {
         public int Id { get; set; }
-        public int User_Id { get; set; }
+        public User Author { get; set; }
         public string Text { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public DateTime DateCreated { get; set; }
     }
 }

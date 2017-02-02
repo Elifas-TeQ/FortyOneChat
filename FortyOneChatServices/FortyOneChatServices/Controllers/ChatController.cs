@@ -1,47 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using FortyOneChatServices.Models;
-using FortyOneChatServices.Models.Requests;
+
 
 namespace FortyOneChatServices.Controllers
 {
     [RoutePrefix("api/Chat")]
     public class ChatController : ApiController
     {
-        public static Dictionary<int, string> Users = new Dictionary<int, string>();
-        public static Dictionary<int, Message> Messages = new Dictionary<int, Message>();
+        public static List<User> Users = new List<User>();
+        public static List< Message> Messages = new List<Message>();
+        private const int DELTA_ONLINE = 3;
 
         [HttpGet]
         [Route("History")]
-        public IEnumerable<Message> GetHistory()
+        public IEnumerable<Message> GetChatHistory(int UserId)
         {
-            return Messages.Values.Take<Message>(20); ;
+            var curUser = Users.Single(u => u.Id == UserId);
+            curUser.LastTimeOnline = DateTime.Now.AddMinutes(DELTA_ONLINE);
+            
+            return Messages; 
         }
 
         [HttpPost]
         [Route("Login")]
-        public bool Login(string userName)
+        public User Login(string userName)
         {
-            bool res = Users.Values.Contains<string>(userName);
-            if (!res)
+            if (Users.Count == 0)
             {
-                Users.Add(Users.Keys.LastOrDefault<int>()+1,userName);
+                var curUser = new User() { Id = 0, Name = userName, LastTimeOnline = DateTime.Now };
+                Users.Add(curUser);
+                return curUser;
             }
-
-            return !res;
+            else
+            {
+               var curUser =  Users.Single(u => u.Name.Equals(userName));
+               return curUser!= null ? curUser : new User() { Id = 0, Name = userName, LastTimeOnline = DateTime.Now };   
+            }
         }
         
         [HttpPost]
         [Route("SendMessage")]
         public bool SendMessage(Message message)
         {
-            var index = Messages.Count + 1;
-            Messages.Add(index, message);
-           
+            message.Id = Messages.Max(x => x.Id);
+            Messages.Add(message);
+        
             return true;
         }
 
@@ -51,6 +57,5 @@ namespace FortyOneChatServices.Controllers
         {
             return true;
         }
-        
     }
 }
