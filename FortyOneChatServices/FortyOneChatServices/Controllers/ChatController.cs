@@ -13,7 +13,7 @@ namespace FortyOneChatServices.Controllers
     public class ChatController : ApiController
     {
         public static Dictionary<int, string> Users = new Dictionary<int, string>();
-        public static Dictionary<int, Message> Messages = new Dictionary<int, Message>();
+        public static Dictionary<int, Message> Messages = new Dictionary<int, Message>() { { 1, new Message { Text = "324" } } };
 
         [HttpGet]
         [Route("History")]

@@ -20,7 +20,7 @@ namespace FortyOneChat
 
         protected override void RegisterTypes()
         {
-            Container.RegisterType<IChatService, FortyOneChat.Core.Services.Fake.ChatServiceFake>(new ContainerControlledLifetimeManager());
+            Container.RegisterType<IChatService, FortyOneChat.Core.Services.ChatService>(new ContainerControlledLifetimeManager());
             Container.RegisterType<IUserService, UserService>(new ContainerControlledLifetimeManager());
             Container.RegisterType<IApplicationContext, Core.Services.Fakes.ApplicationContext>(new ContainerControlledLifetimeManager());
             Container.RegisterType<ITaskDispatcher, XamarinTaskDispatcher>(new ContainerControlledLifetimeManager());

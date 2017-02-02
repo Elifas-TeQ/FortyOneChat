@@ -34,7 +34,7 @@ namespace FortyOneChat.Controls
         {
             var message = item as Message;
             if (message == null) return null;
-			return message.Author.Id == 1 ? _incomingMessageTemplate : _outcommingMessageTemplate;  
+			return 1 == 1 ? _incomingMessageTemplate : _outcommingMessageTemplate;  
         }
     }
 }
