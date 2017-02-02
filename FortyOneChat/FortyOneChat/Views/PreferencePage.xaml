@@ -5,6 +5,22 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
-    prism:ViewModelLocator.AutowireViewModel="True">
-    <StackLayout />
+    prism:ViewModelLocator.AutowireViewModel="True" >
+
+    <ContentPage.Content>
+        <ContentView >
+            <StackLayout HorizontalOptions="FillAndExpand" Padding="10" VerticalOptions="Center">
+
+                <Image Source="logo.png" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
+
+                <Entry Placeholder="Enter user name" TextColor="Black" Text="{Binding UserName, Mode=TwoWay}" />
+
+                <Button Text="Login"  Command="{Binding LoginCommand}"  />
+
+                <Label Text="http://10.129.68.199:8888/" HorizontalTextAlignment="Center"/>
+
+            </StackLayout>
+        </ContentView>
+    </ContentPage.Content>
+
 </ContentPage>

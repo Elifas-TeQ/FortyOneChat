@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System;
+using FortyOneChat.Core.Models;
 
 namespace FortyOneChat.Core.Services
 {
@@ -29,7 +30,7 @@ namespace FortyOneChat.Core.Services
 			return await this.GetListNamesFromHttpResponseMessage(response);
 		}
 
-		public async Task<int> LogIn(string userName)
+		public async Task<User> LogIn(string userName)
 		{
 			if (string.IsNullOrEmpty(userName))
 			{
@@ -38,13 +39,13 @@ namespace FortyOneChat.Core.Services
 			string content = JsonConvert.SerializeObject(userName);
 			var stringContent = new StringContent(content);
 			var httpClient = new HttpClient();
-			HttpResponseMessage response = await httpClient.PostAsync($"{this._applicationContext.ServiceUri}/Login", stringContent)
+			HttpResponseMessage response = await httpClient.PostAsync($"{this._applicationContext.ServiceUri}/Login?userName={userName}", stringContent)
 			                                               .ConfigureAwait(false);
 			if (response.IsSuccessStatusCode)
 			{
 				content = await response.Content.ReadAsStringAsync();
-				int userId = JsonConvert.DeserializeObject<int>(content);
-				return userId;
+				User user = JsonConvert.DeserializeObject<User>(content);
+				return user;
 			}
 			else
 			{

@@ -18,7 +18,7 @@ namespace FortyOneChatServices.Controllers
         [Route("History")]
         public IEnumerable<Message> GetChatHistory(int UserId)
         {
-            var curUser = Users.Single(u => u.Id == UserId);
+            var curUser = Users.SingleOrDefault(u => u.Id == UserId);
             if (curUser!= null)
             {
                 curUser.LastTimeOnline = DateTime.Now.AddMinutes(DELTA_ONLINE);
@@ -39,8 +39,17 @@ namespace FortyOneChatServices.Controllers
             }
             else
             {
-               var curUser =  Users.Single(u => u.Name.Equals(userName));
-               return curUser!= null ? curUser : new User() { Id = 0, Name = userName, LastTimeOnline = DateTime.Now };   
+               var curUser =  Users.SingleOrDefault(u => u.Name.Equals(userName));
+                if (curUser == null)
+                {
+                    var newUser = new User() { Id = Users.Max(x => x.Id) + 1, Name = userName, LastTimeOnline = DateTime.Now };
+                    Users.Add(newUser);
+                    return newUser;
+                }
+                else
+                {
+                    return curUser;
+                }
             }
         }
         
@@ -59,6 +68,13 @@ namespace FortyOneChatServices.Controllers
         public bool  GetUserStatus()
         {
             return true;
+        }
+        
+        [HttpGet]
+        [Route("ClearAllMessages")]
+        public void ClearAllMessages()
+        {
+            Messages.Clear();
         }
     }
 }

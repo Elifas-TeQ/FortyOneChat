@@ -15,7 +15,7 @@ namespace FortyOneChat
 
         protected override void OnInitialized()
         {
-            NavigationService.NavigateAsync("MainNavigationPage/ChatPage");
+            NavigationService.NavigateAsync("MainNavigationPage/PreferencePage");
         }
 
         protected override void RegisterTypes()
