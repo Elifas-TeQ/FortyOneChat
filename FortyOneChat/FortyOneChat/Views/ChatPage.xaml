@@ -6,6 +6,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:FortyOneChat.Controls;assembly=FortyOneChat"
     xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+    Title="Forty One Chat"
     prism:ViewModelLocator.AutowireViewModel="True">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -18,27 +19,18 @@
         <ContentView Padding="{StaticResource pagePadding}">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="10*" />
-                    <RowDefinition Height="*" />
+                    <RowDefinition Height="17*" />
+                    <RowDefinition Height="3*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="8*" />
                     <ColumnDefinition Width="2*" />
                 </Grid.ColumnDefinitions>
 
-                <Label
-                    Grid.Row="0"
-                    FontAttributes="Bold"
-                    FontFamily="Roboto"
-                    FontSize="Large"
-                    Text="Forty One Chat"
-                    TextColor="#673AB7" />
-
                 <!--  Message cards  -->
                 <ListView
                     x:Name="MessageList"
-                    Grid.Row="1"
+                    Grid.Row="0"
                     Grid.Column="0"
                     HasUnevenRows="true"
                     ItemSelected="MessageList_OnItemSelected"
@@ -49,14 +41,14 @@
 
                 <!--  Online list  -->
                 <ContentView
-                    Grid.Row="1"
+                    Grid.Row="0"
                     Grid.Column="1"
                     Padding="{StaticResource contentPadding}">
                     <StackLayout>
                         <Label
                             HorizontalTextAlignment="Center"
                             Text="{Binding Path='OnlineUserCollection.Count' StringFormat='Online {0}'}"
-                            TextColor="#00E676"
+                            TextColor="#FF4081"
                             VerticalTextAlignment="Center" />
 
                         <ListView ItemsSource="{Binding OnlineUserCollection}">
@@ -64,11 +56,11 @@
                                 <DataTemplate>
                                     <ViewCell>
                                         <Label
-                                            BackgroundColor="#ECEFF1"
-                                            FontSize="Small"
+                                            BackgroundColor="#F5F5F5"
+                                            FontSize="Micro"
                                             HorizontalTextAlignment="Center"
                                             Text="{Binding}"
-                                            TextColor="#37474F"
+                                            TextColor="#455A64"
                                             VerticalTextAlignment="Center" />
                                     </ViewCell>
                                 </DataTemplate>
@@ -79,32 +71,31 @@
 
                 </ContentView>
 
-                <Grid
-                    Grid.Row="2"
+
+                <!--  Message entry  -->
+                <ContentView
+                    Grid.Row="1"
                     Grid.Column="0"
-                    Grid.ColumnSpan="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="8*" />
-                        <ColumnDefinition Width="2*" />
-                    </Grid.ColumnDefinitions>
+                    Padding="{StaticResource contentPadding}">
+                    <Editor Text="{Binding NewMessage}" />
+                </ContentView>
 
-                    <!--  Message entry  -->
-                    <ContentView Grid.Column="0" Padding="{StaticResource contentPadding}">
-                        <Editor Text="{Binding NewMessage}" />
-                    </ContentView>
+                <!--  Send button  -->
+                <ContentView
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Padding="{StaticResource contentPadding}">
+                    <Button
+                        BackgroundColor="#FF4081"
+                        BorderColor="#F50057"
+                        Command="{Binding SendMessageCommand}"
+                        FontAttributes="Bold"
+                        HorizontalOptions="FillAndExpand"
+                        Text="Send"
+                        TextColor="White"
+                        VerticalOptions="CenterAndExpand" />
 
-                    <!--  Send button  -->
-                    <ContentView Grid.Column="1" Padding="{StaticResource contentPadding}">
-                        <Button
-                            BackgroundColor="#673AB7"
-                            BorderRadius="0"
-                            Command="{Binding SendMessageCommand}"
-                            Text="Send"
-                            TextColor="White"
-                            VerticalOptions="CenterAndExpand" />
-
-                    </ContentView>
-                </Grid>
+                </ContentView>
             </Grid>
         </ContentView>
     </ContentPage.Content>
