@@ -1,19 +1,36 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<ViewCell xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="FortyOneChat.Controls.ViewCells.OutcomingViewCell">
-  <Grid ColumnSpacing="2" Padding="5">
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="40"></ColumnDefinition>
-      <ColumnDefinition Width="*"></ColumnDefinition>
-    </Grid.ColumnDefinitions>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="*"></RowDefinition>
-      <RowDefinition Height="Auto"></RowDefinition>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ViewCell
+    x:Class="FortyOneChat.Controls.ViewCells.OutcomingViewCell"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    <Grid Padding="5" ColumnSpacing="2">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
 
-    </Grid.RowDefinitions>
-    
-    <Frame Grid.Row="0" OutlineColor="Transparent" HasShadow="False" Grid.Column="1" BackgroundColor="#F5F5F5">
-      <Label TextColor="Black" HorizontalTextAlignment="End" Text="{Binding Text}" />
-    </Frame>
-    <Label Grid.Row="1" FontSize="Micro" Grid.Column="1" HorizontalTextAlignment="End"  Text="{Binding DateTime, StringFormat='{0:MM/dd/yyyy hh:mm tt}'}" TextColor="Gray"></Label>
-  </Grid>
+        </Grid.RowDefinitions>
+
+        <Frame
+            Grid.Row="0"
+            Grid.Column="1"
+            BackgroundColor="#F5F5F5"
+            HasShadow="False"
+            OutlineColor="Transparent">
+            <Label
+                HorizontalTextAlignment="End"
+                Text="{Binding Text}"
+                TextColor="Black" />
+        </Frame>
+        <Label
+            Grid.Row="1"
+            Grid.Column="1"
+            FontSize="Micro"
+            HorizontalTextAlignment="End"
+            Text="{Binding DateTime, StringFormat='{0:MM/dd/yyyy hh:mm tt}'}"
+            TextColor="Gray" />
+    </Grid>
 </ViewCell>

@@ -62,7 +62,7 @@ namespace FortyOneChat.ViewModels
 			this._applicationContext = applicationContext;
             this._timer = timer;
             this.SendMessageCommand = new DelegateCommand(SendMessage);
-
+           
             List<string> users = this._userService.GetOnlineUsers().Result;
             OnlineUserCollection = new ObservableCollection<string>(users);
             OnlineUserCollection.Add("Andriy");
@@ -81,25 +81,28 @@ namespace FortyOneChat.ViewModels
         }
         public void SendMessage()
         {
-            _newMessage = _newMessage.TrimEmptyTape().Trim();
-
             if (!String.IsNullOrEmpty(_newMessage))
             {
-                var message = new Message
-                {
-                    Text = _newMessage,
-                    Author = new User { Id = this._applicationContext.CurrentUser.Id }
-                };
+                _newMessage = _newMessage.TrimEmptyTape().Trim();
 
-                bool isSuccess = this._chatService.SendMessage(message).Result;
+                if (!String.IsNullOrEmpty(_newMessage))
+                {
+                    var message = new Message
+                    {
+                        Text = _newMessage,
+                        Author = new User { Id = this._applicationContext.CurrentUser.Id }
+                    };
 
-                if (!isSuccess)
-                {
-                    _pageDialogService.DisplayAlertAsync("Message", "Message wasn't successfuly sended.", "OK");
-                }
-                else
-                {
-                    AddMessage(message);
+                    bool isSuccess = this._chatService.SendMessage(message).Result;
+
+                    if (!isSuccess)
+                    {
+                        _pageDialogService.DisplayAlertAsync("Message", "Message wasn't successfuly sended.", "OK");
+                    }
+                    else
+                    {
+                        AddMessage(message);
+                    }
                 }
             }
         }

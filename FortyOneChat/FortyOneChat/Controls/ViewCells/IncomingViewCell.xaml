@@ -17,7 +17,7 @@
             <Frame
                 Grid.Row="0"
                 Grid.Column="0"
-                BackgroundColor="#C5CAE9"
+                BackgroundColor="#3F51B5"
                 HasShadow="False"
                 OutlineColor="Transparent">
                 <Label Text="{Binding Text}" TextColor="White" />
