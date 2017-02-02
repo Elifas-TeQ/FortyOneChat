@@ -9,7 +9,10 @@ using Prism.Services;
 using System.Collections.Generic;
 using FortyOneChat.Core.Models;
 using FortyOneChat.ViewModels;
-using FortyOneChat.Helper;
+using FortyOneChat.Core.Helpers;
+using FortyOneChat.Services;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace FortyOneChat.ViewModels
 {
@@ -19,6 +22,7 @@ namespace FortyOneChat.ViewModels
         private readonly IChatService _chatService;
 		private readonly IUserService _userService;
 		private readonly IApplicationContext _applicationContext;
+        private readonly ITimer _timer;
 
         private ObservableCollection<Message> _messages;
 
@@ -44,11 +48,19 @@ namespace FortyOneChat.ViewModels
 
         public ICommand SendMessageCommand { get; set; }
 
-        public ChatPageViewModel(IChatService chatService, IPageDialogService pageDialogService, IUserService userService, IApplicationContext applicationContext)
+        public bool StopTimer;
+
+        public ChatPageViewModel(
+            IChatService chatService, 
+            IPageDialogService pageDialogService, 
+            IUserService userService, 
+            IApplicationContext applicationContext,
+            ITimer timer)
         {
 			this._userService = userService;
             this._pageDialogService = pageDialogService;
 			this._applicationContext = applicationContext;
+            this._timer = timer;
             this.SendMessageCommand = new DelegateCommand(SendMessage);
 
             List<string> users = this._userService.GetOnlineUsers().Result;
@@ -58,6 +70,7 @@ namespace FortyOneChat.ViewModels
             OnlineUserCollection.Add("Oleksiy");
             OnlineUserCollection.Add("Shasha");
             OnlineUserCollection.Add("Ruslan");
+            OnlineUserCollection.Add("Petro Glazurko");
 
             if (chatService == null)
             {
@@ -70,21 +83,24 @@ namespace FortyOneChat.ViewModels
         {
             _newMessage = _newMessage.TrimEmptyTape().Trim();
 
-            var message = new Message
-			{
-				Text = _newMessage,
-				Author = new User { Id = this._applicationContext.CurrentUser.Id }
-			};
-
-            bool isSuccess = this._chatService.SendMessage(message).Result;
-
-            if (!isSuccess)
-			{
-				_pageDialogService.DisplayAlertAsync("Message", "Message wasn't successfuly sended.", "OK");
-			}
-            else
+            if (!String.IsNullOrEmpty(_newMessage))
             {
-                AddMessage(message);
+                var message = new Message
+                {
+                    Text = _newMessage,
+                    Author = new User { Id = this._applicationContext.CurrentUser.Id }
+                };
+
+                bool isSuccess = this._chatService.SendMessage(message).Result;
+
+                if (!isSuccess)
+                {
+                    _pageDialogService.DisplayAlertAsync("Message", "Message wasn't successfuly sended.", "OK");
+                }
+                else
+                {
+                    AddMessage(message);
+                }
             }
         }
 
@@ -99,7 +115,7 @@ namespace FortyOneChat.ViewModels
         
         public void OnNavigatedFrom(NavigationParameters parameters)
         {
-            
+            StopTimer = true;
         }
 
         public async void OnNavigatedTo(NavigationParameters parameters)
@@ -109,6 +125,27 @@ namespace FortyOneChat.ViewModels
 				List<Message> messages = await this._chatService.GetChatHistory(); 
 				Messages = new ObservableCollection<Message>(messages);
             }
+
+            _timer.RunTimer(TimeSpan.FromSeconds(5), TheLoop);
+        }
+
+        private bool TheLoop()
+        {
+            Task.Factory.StartNew(async () => {
+                int maxMessageId = 0;
+                if (Messages.Any())
+                {
+                    maxMessageId = Messages.Select(x => x.Id).Max();
+                }
+
+                var messagesFromServer = (await _chatService.GetChatHistory()).Where(x => x.Id > maxMessageId).ToList();
+
+                foreach(var message in messagesFromServer)
+                {
+                    Messages.Add(message);
+                }
+            });
+            return !StopTimer;
         }
     }
 }

@@ -19,7 +19,10 @@ namespace FortyOneChatServices.Controllers
         public IEnumerable<Message> GetChatHistory(int UserId)
         {
             var curUser = Users.Single(u => u.Id == UserId);
-            curUser.LastTimeOnline = DateTime.Now.AddMinutes(DELTA_ONLINE);
+            if (curUser!= null)
+            {
+                curUser.LastTimeOnline = DateTime.Now.AddMinutes(DELTA_ONLINE);
+            }
             
             return Messages; 
         }
@@ -45,7 +48,7 @@ namespace FortyOneChatServices.Controllers
         [Route("SendMessage")]
         public bool SendMessage(Message message)
         {
-            message.Id = Messages.Max(x => x.Id);
+            message.Id = Messages.Count != 0 ? Messages.Max(x => x.Id) + 1 : 0;
             Messages.Add(message);
         
             return true;
