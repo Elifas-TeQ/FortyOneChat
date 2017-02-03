@@ -22,18 +22,25 @@
                 OutlineColor="Transparent">
                 <Label Text="{Binding Text}" TextColor="White" />
             </Frame>
-            <Label
-                Grid.Row="1"
-                Grid.Column="0"
-                FontSize="Micro"
-                Text="{Binding DateCreated, StringFormat='{0:MM/dd/yyyy hh:mm tt}'}"
-                TextColor="Gray" />
-          <Label
-                Grid.Row="1"
-                Grid.Column="1"
-                FontSize="Micro"
-                Text="{Binding Author.Name, StringFormat='by {0}'}"
-                TextColor="Gray" />
+            <Grid Grid.Row="1" Grid.Column="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Label
+                    Grid.Column="0"
+                    FontSize="Micro"
+                    Text="{Binding DateCreated, StringFormat='{0:MM/dd/yyyy hh:mm tt}'}"
+                    TextColor="Gray" />
+                <Label
+                    Grid.Column="1"
+                    FontSize="Micro"
+                    HorizontalOptions="Start"
+                    Text="{Binding Author.Name, StringFormat='by {0}'}"
+                    TextColor="Gray" />
+            </Grid>
+
+
         </Grid>
     </StackLayout>
 </ViewCell>

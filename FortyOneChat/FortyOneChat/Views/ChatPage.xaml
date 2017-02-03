@@ -20,7 +20,7 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="17*" />
-                    <RowDefinition Height="3*" />
+                    <RowDefinition Height="4*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="8*" />
@@ -85,17 +85,11 @@
                     Grid.Row="1"
                     Grid.Column="1"
                     Padding="{StaticResource contentPadding}">
-                    <Button
-                        BackgroundColor="#FF4081"
-                        BorderColor="#F50057"
-                        Command="{Binding SendMessageCommand}"
-                        FontAttributes="Bold"
-                        HorizontalOptions="FillAndExpand"
-                        Text="Send"
-                        TextColor="White"
-                        VerticalOptions="CenterAndExpand" />
+
+                    <local:FABControl Padding="20" Command="{Binding SendMessageCommand}" />
 
                 </ContentView>
+
             </Grid>
         </ContentView>
     </ContentPage.Content>

@@ -1,28 +1,23 @@
-﻿using System;
+﻿using Prism.Commands;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Xamarin.Forms;
 
-namespace FortyOneChat
+namespace FortyOneChat.Controls
 {
-    public class FABControl : Image
+    public class FABControl : ContentView
     {
-        /*
-        public FABControl()
+        public static readonly BindableProperty CommandProperty = BindableProperty.Create<FABControl, ICommand>(p => p.Command, null);
+        
+        public ICommand Command
         {
-
-            int photoSize = Device.OnPlatform(50, 50, 80);
-            var photo = new FABControl
-            {
-                WidthRequest = photoSize,
-                HeightRequest = photoSize,
-                Aspect = Aspect.AspectFill,
-                HorizontalOptions = LayoutOptions.Center
-            };
-            photo.SetBinding(Image.SourceProperty, s => s.Image);
-
-        }*/
+            get { return (ICommand)GetValue(CommandProperty); }
+            set { SetValue(CommandProperty, value); }
+        }
+        
     }
 }
