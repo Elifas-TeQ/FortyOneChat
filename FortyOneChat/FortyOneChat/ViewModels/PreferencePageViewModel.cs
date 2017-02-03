@@ -50,13 +50,13 @@ namespace FortyOneChat.ViewModels
 
                 if (responce == null)
                 {
-                    _pageDialogService.DisplayAlertAsync("Alyarm!!!!!!", "Server returned response with NOT succcess status code during login post request.", "OK");
+                    await _pageDialogService.DisplayAlertAsync("Alyarm!!!!!!", "Server returned response with NOT succcess status code during login post request.", "OK");
                 }
                 else
                 {
                     _applicationContext.CurrentUser = responce;
                     ChatDataTemplateSelector.CurrentUserId = responce.Id;
-                    _navigationService.NavigateAsync("MainNavigationPage/ChatPage");
+                    await _navigationService.NavigateAsync("ChatPage");
                 }
 
             }

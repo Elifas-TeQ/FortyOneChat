@@ -35,6 +35,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ChatDataTemplateSelector.cs" />
+    <Compile Include="Controls\FABControl.cs" />
     <Compile Include="Controls\ViewCells\IncomingViewCell.xaml.cs">
       <DependentUpon>IncomingViewCell.xaml</DependentUpon>
     </Compile>
