@@ -22,9 +22,9 @@ namespace FortyOneChat.Core.Services.Fake
 
 		}
 
-		public Task<bool> SendMessage(Message message)
+		public Task<int> SendMessage(Message message)
 		{
-            return Task<bool>.Run( () => { return true; });
+            return Task<bool>.Run( () => { return 1; });
 		}
 	}
 }

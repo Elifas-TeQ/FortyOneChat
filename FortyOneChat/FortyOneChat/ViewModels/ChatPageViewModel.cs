@@ -25,6 +25,9 @@ namespace FortyOneChat.ViewModels
         private readonly IUserService _userService;
         private readonly IApplicationContext _applicationContext;
         private readonly ITimer _timer;
+        private readonly ITaskDispatcher _taskDispatcher;
+
+        private static object lockObject = new object();
 
         private ObservableCollection<Message> _messages;
 
@@ -57,12 +60,14 @@ namespace FortyOneChat.ViewModels
             IPageDialogService pageDialogService,
             IUserService userService,
             IApplicationContext applicationContext,
-            ITimer timer)
+            ITimer timer,
+            ITaskDispatcher taskDispatcher)
         {
             this._userService = userService;
             this._pageDialogService = pageDialogService;
             this._applicationContext = applicationContext;
             this._timer = timer;
+            this._taskDispatcher = taskDispatcher;
             this.SendMessageCommand = new DelegateCommand(async () => { await SendMessage(); });
 
             OnlineUserCollection = new ObservableCollection<string>();
@@ -85,15 +90,20 @@ namespace FortyOneChat.ViewModels
                     {
                         Text = _newMessage,
                         Author = _applicationContext.CurrentUser,
-                        DateCreated = DateTime.Now
+                        DateCreated = DateTime.Now,
+                        Id = -1
                     };
 
-                    bool isSuccess = await this._chatService.SendMessage(message);
 
-                    if (!isSuccess)
+                    _taskDispatcher.RunOnUIThread(() =>
                     {
-                        _pageDialogService.DisplayAlertAsync("Message", "Message wasn't successfuly sended.", "OK");
-                    }
+                        Messages.Add(message);
+                        ScrollToTheEnd(true);
+                    });
+
+                    var id = await this._chatService.SendMessage(message);
+
+                    message.Id = id;
                 }
             }
             NewMessage = string.Empty;
@@ -115,7 +125,7 @@ namespace FortyOneChat.ViewModels
 
             }
 
-            _timer.RunTimer(TimeSpan.FromSeconds(5), TheLoop);
+            _timer.RunTimer(TimeSpan.FromSeconds(10), TheLoop);
         }
 
         private bool TheLoop()

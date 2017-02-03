@@ -31,7 +31,7 @@ namespace FortyOneChat.Core.Services
 			return messages;
 		}
 
-		public async Task<bool> SendMessage(Message message)
+		public async Task<int> SendMessage(Message message)
 		{
 			string content = JsonConvert.SerializeObject(message);
 			var stringContent = new StringContent(content, Encoding.UTF8, "application/json");
@@ -39,7 +39,8 @@ namespace FortyOneChat.Core.Services
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 			HttpResponseMessage response = await httpClient.PostAsync($"{this._applicationContext.ServiceUri}/SendMessage", stringContent);
             
-			return response.IsSuccessStatusCode;
+			var res  = await  response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<int>(res);
 		}
 	}
 }

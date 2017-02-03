@@ -7,6 +7,6 @@ namespace FortyOneChat.Core.Services
     public interface IChatService
     {
 		Task<List<Message>> GetChatHistory();
-		Task<bool> SendMessage(Message message);
+		Task<int> SendMessage(Message message);
     }
 }
