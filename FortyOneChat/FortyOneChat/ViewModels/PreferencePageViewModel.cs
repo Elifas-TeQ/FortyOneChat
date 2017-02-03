@@ -17,7 +17,7 @@ namespace FortyOneChat.ViewModels
         private readonly IPageDialogService _pageDialogService;
         private readonly INavigationService _navigationService;
         private readonly IUserService _userService;
-        private readonly IApplicationContext _appContext;
+        private readonly IApplicationContext _applicationContext;
         
         public ICommand LoginCommand { get; set; }
         private const string _serviceUri = @"http://10.129.68.199:8888/api/Chat";

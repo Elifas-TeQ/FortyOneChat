@@ -11,6 +11,6 @@ namespace FortyOneChat.Core.Services
     {
         public User CurrentUser { get; set; }
         //public string ServiceUri => @"http://192.168.127.2:7777/api/Chat";
-        public string ServiceUri => @"http://10.60.33.102:7777/api/Chat";
+        public string ServiceUri => @"http://10.129.68.199:8888/api/Chat";
     }
 }
