@@ -66,13 +66,13 @@ namespace FortyOneChatServices.Controllers
         
         [HttpPost]
         [Route("SendMessage")]
-        public bool SendMessage(Message message)
+        public int SendMessage(Message message)
         {
             message.Id = Messages.Count != 0 ? Messages.Max(x => x.Id) + 1 : 0;
             message.Author.LastTimeOnline = DateTime.UtcNow.AddMinutes(DELTA_ONLINE);
             Messages.Add(message);
         
-            return true;
+            return message.Id;
         }
 
         [HttpGet]
