@@ -22,7 +22,10 @@ namespace FortyOneChat.Controls
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
             var message = item as Message;
-            if (message == null) return null;
+            if (message == null)
+            {
+                return null;
+            }
 			return message.Author.Id != CurrentUserId ? _incomingMessageTemplate : _outcommingMessageTemplate;  
         }
     }

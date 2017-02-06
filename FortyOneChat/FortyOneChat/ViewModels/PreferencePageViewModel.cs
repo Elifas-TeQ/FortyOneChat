@@ -56,7 +56,7 @@ namespace FortyOneChat.ViewModels
                 {
                     _applicationContext.CurrentUser = responce;
                     ChatDataTemplateSelector.CurrentUserId = responce.Id;
-                    _navigationService.NavigateAsync("MainNavigationPage/ChatPage");
+                    _navigationService.NavigateAsync("ChatPage");
                 }
 
             }
